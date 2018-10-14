@@ -41,7 +41,8 @@ def updatemail():
 @app.route('/logout')
 def dropsession():
     session.pop('user', None)
-    return index()
+    print('logging out app')
+    return render_template('login.html')
 
 @app.route('/login',methods=['GET', 'POST'])
 def login():
