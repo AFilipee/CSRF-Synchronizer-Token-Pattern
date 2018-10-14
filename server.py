@@ -1,8 +1,6 @@
 from flask import Flask, render_template,redirect, url_for,request,session
-from flask_wtf import FlaskForm
-from wtforms import StringField
-from flask_login import LoginManager, login_required, login_user, logout_user, UserMixin, current_user
 import os
+import random, string
 
 app = Flask(__name__)
 app.secret_key = os.urandom(100)
@@ -13,6 +11,10 @@ user = {
 }
 
 msg = None
+
+def createToken(length):
+   letters = string.ascii_lowercase
+   return ''.join(random.choice(letters) for i in range(length))
 
 @app.route('/')
 def index():
@@ -36,15 +38,20 @@ def updatemail():
         return render_template('updateemail.html',msg=msg)
     return redirect(url_for('login'))
 
+@app.route('/logout')
+def dropsession():
+    session.pop('user', None)
+    return index()
 
 @app.route('/login',methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         result = request.form
-        
+
         if result.get('email') == user.get('email') and result.get('password')==user.get('password'):
+            session['user'] = None
             session['user'] = result.get('email')
-            user['token'] = 'myappserert'
+            user['token'] = createToken(20)
             #return redirect(url_for('updatemail'))
             return render_template('updateemail.html',csrf=user.get('token'))
     return index()
