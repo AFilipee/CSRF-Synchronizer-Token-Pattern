@@ -35,7 +35,7 @@ def updatemail():
                 else:
                     msg = 'fail'
                     print('tokens not valid')
-        return render_template('updateemail.html',msg=msg)
+        return render_template('updateemail.html',msg=msg,csrf=user.get('token'),user=user.get('email'))
     return redirect(url_for('login'))
 
 @app.route('/logout')
@@ -54,7 +54,7 @@ def login():
             session['user'] = result.get('email')
             user['token'] = createToken(20)
             #return redirect(url_for('updatemail'))
-            return render_template('updateemail.html',csrf=user.get('token'))
+            return render_template('updateemail.html',csrf=user.get('token'),user=user.get('email'))
     return index()
 
 if __name__ == "__main__":
