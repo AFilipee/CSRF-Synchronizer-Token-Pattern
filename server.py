@@ -19,12 +19,14 @@ def index():
 
 @app.route('/update',methods=['GET', 'POST'])
 def updatemail():
-    if request.method == 'POST':
-             result = request.form
-             print(result)
-             user['email'] = result.get('email')
-             user['password'] = result.get('password')
-    return render_template('updateemail.html')
+    if 'user' in session:
+        if request.method == 'POST':
+                result = request.form
+                print(result)
+                user['email'] = result.get('email')
+                user['password'] = result.get('password')
+        return render_template('updateemail.html')
+    return redirect(url_for('login'))
 
 
 @app.route('/login',methods=['GET', 'POST'])
@@ -33,7 +35,7 @@ def login():
         result = request.form
         
         if result.get('email') == user.get('email') and result.get('password')==user.get('password'):
-            session['username'] = result.get('email')
+            session['user'] = result.get('email')
             return redirect(url_for('updatemail'))
     return index()
 
