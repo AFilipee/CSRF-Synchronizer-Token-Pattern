@@ -12,6 +12,7 @@ user = {
     "token":''
 }
 
+msg = None
 
 @app.route('/')
 def index():
@@ -23,9 +24,16 @@ def updatemail():
         if request.method == 'POST':
                 result = request.form
                 print(result)
-                user['email'] = result.get('email')
-                user['password'] = result.get('password')
-        return render_template('updateemail.html')
+                print(user)
+                if result.get('csrf') == user.get('token'):
+                    user['email'] = result.get('email')
+                    user['password'] = result.get('password')
+                    msg = 'sucess'
+                    print('tokens are valid')
+                else:
+                    msg = 'fail'
+                    print('tokens not valid')
+        return render_template('updateemail.html',msg=msg)
     return redirect(url_for('login'))
 
 
@@ -36,7 +44,9 @@ def login():
         
         if result.get('email') == user.get('email') and result.get('password')==user.get('password'):
             session['user'] = result.get('email')
-            return redirect(url_for('updatemail'))
+            user['token'] = 'myappserert'
+            #return redirect(url_for('updatemail'))
+            return render_template('updateemail.html',csrf=user.get('token'))
     return index()
 
 if __name__ == "__main__":

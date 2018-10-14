@@ -17,9 +17,11 @@
             </h1>
             <div>
                 <form method="POST" action="/update">
+
+                    <input hidden name="csrf" type="text" value="{{csrf}}">
                     <div class="field">
                         <p class="control has-icons-left has-icons-right">
-                            <input name = "email" class="input" type="email" placeholder="Email" >
+                            <input name="email" class="input" type="email" placeholder="Email">
                             <span class="icon is-small is-left">
                                 <i class="fas fa-envelope"></i>
                             </span>
@@ -28,7 +30,7 @@
                             </span>
                         </p>
                     </div>
-                  
+
                     <div class="field">
                         <p class="control has-icons-left">
                             <input name="password" class="input" type="password" placeholder="Password">
@@ -37,11 +39,32 @@
                             </span>
                         </p>
                     </div>
-                    <input  class="button is-primary" type="submit" value="Update">
+                    <input class="button is-primary" type="submit" value="Update">
                 </form>
             </div>
         </div>
+
+
     </section>
+
+{% if msg == 'sucess' %}
+
+    <section>
+        <div class="notification is-success">
+            CSRF Token Valid!
+        </div>
+    </section>
+{% elif msg == 'fail' %}
+    <section>
+        <div class="notification is-danger">
+            CSRF Token Valid!
+        </div>
+    </section>
+{% else %}
+<section>
+
+</section>
+{% endif %}
 </body>
 
 </html>
