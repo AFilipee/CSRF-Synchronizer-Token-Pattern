@@ -3,7 +3,9 @@ import os
 import random, string
 
 app = Flask(__name__)
+
 app.secret_key = os.urandom(100)
+
 user = {
     "email":"admin@email.com",
     "password":"admin123",
@@ -41,7 +43,6 @@ def updatemail():
 @app.route('/logout')
 def dropsession():
     session.pop('user', None)
-    print('logging out app')
     return render_template('login.html')
 
 @app.route('/login',methods=['GET', 'POST'])
@@ -53,7 +54,6 @@ def login():
             session['user'] = None
             session['user'] = result.get('email')
             user['token'] = createToken(20)
-            #return redirect(url_for('updatemail'))
             return render_template('updateemail.html',csrf=user.get('token'),user=user.get('email'))
     return index()
 
